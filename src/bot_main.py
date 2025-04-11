@@ -30,7 +30,7 @@ def info(message):
         os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
 
     elif message.text == "Подтвердить игру":
-        bot.send_message(message.chat.id, "Игра подтверждена! Эмулирую нажатие ЛКМ ровно посередине игры для подтверждения.")
+        bot.send_message(message.chat.id, "Игра подтверждена!")
         # Эмуляция нажатия ЛКМ в центре экрана
         screen_width, screen_height = pyautogui.size()
         pyautogui.click(x=screen_width // 2, y=screen_height // 2)
