@@ -105,7 +105,6 @@ def task_notification():
         for task in tasks:
             if task["notification_date"] == now and task["status"] == "P":
                 bot.send_message(my_id, f"Напоминание о задаче:\n{task['description']}")
-                task["status"] = "D"  # Обновляем статус задачи на выполненную
         time.sleep(60)  # Проверяем каждую минуту
 
 notification_thread = threading.Thread(target=task_notification, daemon=True)
