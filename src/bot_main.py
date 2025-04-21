@@ -107,8 +107,10 @@ def task_notification():
                 bot.send_message(my_id, f"Напоминание о задаче:\n{task['description']}")
                 task["status"] = "D"  # Обновляем статус задачи на выполненную
         time.sleep(60)  # Проверяем каждую минуту
-        
+
 notification_thread = threading.Thread(target=task_notification, daemon=True)
 notification_thread.start()
+
+
 
 bot.infinity_polling()
