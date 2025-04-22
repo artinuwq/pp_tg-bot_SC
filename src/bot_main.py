@@ -33,8 +33,9 @@ def Main(message):
     confirm_game_button = telebot.types.KeyboardButton("Подтвердить игру")
     add_task_button = telebot.types.KeyboardButton("Добавить задачу")
     all_tasks_button = telebot.types.KeyboardButton("Весь список")
+    delete_task_button = telebot.types.KeyboardButton("Удалить задачу")
     markup.add(sleep_button, confirm_game_button)
-    markup.add(add_task_button, all_tasks_button)
+    markup.add(add_task_button, delete_task_button, all_tasks_button)
     bot.send_message(message.chat.id, f"Привет {message.from_user.first_name}\nСледующая строка, доступные действия:", reply_markup=markup)
 
 
@@ -72,12 +73,31 @@ def info(message):
         msg = bot.send_message(message.chat.id, "Введите задачу:")
         bot.register_next_step_handler(msg, add_task)
 
+    elif message.text == "Удалить задачу":
+        if tasks:
+            task_list = "\n".join(f"{i+1}. {task}" for i, task in enumerate(tasks))
+            msg = bot.send_message(message.chat.id, f"Текущие задачи:\n{task_list}\n\nВведите номер задачи для удаления:")
+            bot.register_next_step_handler(msg, delete_task)
+        else:
+            bot.send_message(message.chat.id, "Список задач пуст.")
+
+def delete_task(message):
+    try:
+        task_num = int(message.text) - 1
+        if 0 <= task_num < len(tasks):
+            deleted_task = tasks.pop(task_num)
+            save_tasks()
+            bot.send_message(message.chat.id, f"Задача '{deleted_task}' удалена!")
+        else:
+            bot.send_message(message.chat.id, "Неверный номер задачи!")
+    except ValueError:
+        bot.send_message(message.chat.id, "Пожалуйста, введите числовой номер задачи!")
+
 def add_task(message):
     task = message.text
     tasks.append(str(message.text))
     save_tasks() 
     bot.send_message(message.chat.id, f"Задача '{task}' добавлена!")
-
 
 
 
