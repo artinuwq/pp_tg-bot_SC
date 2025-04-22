@@ -3,8 +3,23 @@ import telebot
 import os
 import pyautogui
 bot = telebot.TeleBot(bot_token)
+# Path for saving tasks
+TASKS_FILE_PATH = os.path.join(os.path.expanduser('~'), 'Desktop', 'tasks.txt')  # save to user's desktop
 
-tasks = []
+def load_tasks():
+    try:
+        with open(TASKS_FILE_PATH, 'r', encoding='utf-8') as file:
+            return [line.strip() for line in file if line.strip()]
+    except FileNotFoundError:
+        return []
+
+def save_tasks():
+    with open(TASKS_FILE_PATH, 'w', encoding='utf-8') as file:
+        for task in tasks:
+            file.write(f"{task}\n")
+
+tasks = load_tasks()
+
 
 @bot.message_handler(commands=['start'])
 def Main(message):
@@ -56,9 +71,11 @@ def info(message):
     elif message.text == "Добавить задачу":
         msg = bot.send_message(message.chat.id, "Введите задачу:")
         bot.register_next_step_handler(msg, add_task)
+
 def add_task(message):
     task = message.text
     tasks.append(str(message.text))
+    save_tasks() 
     bot.send_message(message.chat.id, f"Задача '{task}' добавлена!")
 
 
