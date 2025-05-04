@@ -3,8 +3,7 @@ import telebot
 import os
 import pyautogui
 bot = telebot.TeleBot(bot_token)
-# Path for saving tasks
-TASKS_FILE_PATH = os.path.join(os.path.expanduser('~'), 'Desktop', 'tasks.txt')  # save to user's desktop
+TASKS_FILE_PATH = os.path.join(os.path.expanduser('~'), 'Desktop', 'tasks.txt') 
 
 def load_tasks():
     try:
@@ -26,7 +25,7 @@ def Main(message):
     if str(message.from_user.id) != my_id:
         bot.send_message(message.chat.id, "Владелец не распознан")
         print(message.from_user.id)
-        return  # Ignore messages from non-owners
+        return # Бла бла бла защита от не владельца
     
     markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     sleep_button = telebot.types.KeyboardButton("Спящий режим")
@@ -37,11 +36,6 @@ def Main(message):
     markup.add(sleep_button, confirm_game_button)
     markup.add(add_task_button, delete_task_button, all_tasks_button)
     bot.send_message(message.chat.id, f"Привет {message.from_user.first_name}\nСледующая строка, доступные действия:", reply_markup=markup)
-
-
-
-
-
 
 
 
